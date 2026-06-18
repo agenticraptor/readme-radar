@@ -1,0 +1,93 @@
+version: 2
+
+project_name: readme-radar
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: readme-radar
+    main: ./cmd/readme-radar
+    binary: readme-radar
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/agenticraptor/readme-radar/internal/buildinfo.Version={{.Version}}
+      - -X github.com/agenticraptor/readme-radar/internal/buildinfo.Commit={{.ShortCommit}}
+      - -X github.com/agenticraptor/readme-radar/internal/buildinfo.Date={{.Date}}
+
+archives:
+  - id: default
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Others
+      order: 999
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "merge conflict"
+      - Merge pull request
+      - Merge branch
+
+# Homebrew publishing is disabled by default so the first release succeeds
+# without extra setup. To enable `brew install agenticraptor/tap/readme-radar`:
+#   1. Create a public repo: github.com/agenticraptor/homebrew-tap
+#   2. Add a HOMEBREW_TAP_GITHUB_TOKEN secret (a PAT with `repo` scope)
+#   3. Uncomment the line in .github/workflows/release.yml and the block below
+# brews:
+#   - name: readme-radar
+#     repository:
+#       owner: agenticraptor
+#       name: homebrew-tap
+#     homepage: "https://github.com/agenticraptor/readme-radar"
+#     description: "A 30-second 'is this safe & worth it' verdict for any repo or package."
+#     license: "MIT"
+#     test: |
+#       system "#{bin}/readme-radar version"
+#     commit_author:
+#       name: goreleaser-bot
+#       email: bot@readme-radar.dev
+
+release:
+  github:
+    owner: agenticraptor
+    name: readme-radar
+  prerelease: auto
+  draft: false

@@ -1,0 +1,41 @@
+# Binaries
+/readme-radar
+/dist/
+/bin/
+*.exe
+*.out
+
+# Test & coverage
+coverage.out
+coverage.html
+*.test
+
+# Generated cards (samples)
+*.png
+*.svg
+!docs/**/*.svg
+!docs/**/*.png
+
+# Editor / OS cruft
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local publish helper — not part of the published project
+/push.sh
+
+# Editor/linter backup copies (e.g. github.go.1234567890)
+*.go.[0-9]*
+*.orig
+*.bak
+
+# Vendored dependencies (builds use go.sum + the module proxy instead)
+/vendor/
+
+# Local env
+.env
+.env.local
+
+# Demo capture
+docs/demo.gif.tmp
