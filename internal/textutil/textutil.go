@@ -28,7 +28,7 @@ func Safe(s string) string {
 	for _, r := range s {
 		switch {
 		case r == '\t' || r == '\n' || r == '\r':
-			b.WriteByte(' ') // collapse later
+			_ = b.WriteByte(' ') // collapse later
 		case r == 0x7f: // DEL
 			continue
 		case r < 0x20: // C0 controls, incl. ESC (0x1b) used by ANSI sequences
@@ -36,9 +36,9 @@ func Safe(s string) string {
 		case r >= 0x80 && r <= 0x9f: // C1 controls
 			continue
 		case r == 0x2028 || r == 0x2029: // line/paragraph separators
-			b.WriteByte(' ')
+			_ = b.WriteByte(' ')
 		default:
-			b.WriteRune(r)
+			_, _ = b.WriteRune(r)
 		}
 	}
 	return strings.Join(strings.Fields(b.String()), " ")

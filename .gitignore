@@ -25,6 +25,9 @@ coverage.html
 # Local publish helper — not part of the published project
 /push.sh
 
+# Shell scripts are never part of the published project
+/*.sh
+
 # Editor/linter backup copies (e.g. github.go.1234567890)
 *.go.[0-9]*
 *.orig

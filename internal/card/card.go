@@ -133,7 +133,7 @@ func SVG(rep report.Report) string {
 	fmt.Fprintf(&b, `<text x="%d" y="%d" fill="%s" font-size="13" text-anchor="end">grade %s · %s</text>`,
 		width-40, height-26, dimColor, m.grade, esc(strings.ToLower(m.verdict)))
 
-	b.WriteString(`</svg>`)
+	_, _ = b.WriteString(`</svg>`)
 	return b.String()
 }
 
@@ -229,7 +229,7 @@ func sanitize(s string) string {
 		if isPictograph(r) {
 			continue
 		}
-		b.WriteRune(r)
+		_, _ = b.WriteRune(r)
 	}
 	return strings.Join(strings.Fields(b.String()), " ")
 }

@@ -73,7 +73,7 @@ func (c *anthropicClient) Complete(ctx context.Context, req Request) (string, er
 	var b strings.Builder
 	for _, blk := range out.Content {
 		if blk.Type == "text" {
-			b.WriteString(blk.Text)
+			_, _ = b.WriteString(blk.Text)
 		}
 	}
 	return strings.TrimSpace(b.String()), nil
